@@ -52,7 +52,6 @@ fun Main(viewmodel:AboutViewmodel){
             println("About is called")
 
         }
-
     }
 
 }
