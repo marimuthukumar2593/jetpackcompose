@@ -24,7 +24,11 @@ fun Main(viewmodel:AboutViewmodel){
         composable(Routes.HomeScreen.route) {
             Home(
                 viewmodel,
-                navController) {
+                navController)
+            {
+                /* naviagate to show the edit view of  corresponding about id details */
+                println("About clicked position  == $it")
+
                 navController.navigate("${Routes.AboutScreen.route}/$it")
             }
         }
@@ -37,12 +41,15 @@ fun Main(viewmodel:AboutViewmodel){
         ) { backStackEntry ->
 
             val id = backStackEntry.arguments?.getInt(Routes.AboutScreen.argument) ?: return@composable
+//            val id:Int? = backStackEntry.arguments?.getInt(Routes.AboutScreen.argument)
 
-            viewmodel.fetchById(id)
+            println("About id  == $id")
+            id?.let { viewmodel.fetchById(id) }
 
             AboutDetails(viewmodel) {
                 navController.navigateUp()
             }
+            println("About is called")
 
         }
 

@@ -32,6 +32,7 @@ import com.samplee.todolist.viewmodel.AboutViewmodel
 @Composable
 fun Home(viewmodel: AboutViewmodel, navController: NavHostController,
          selectTask: (Int) -> Unit) {
+    println("Home is called  ==")
 
     val abouts: List<AboutData> by viewmodel.abouts.observeAsState(listOf())
     viewmodel.fetchAll()

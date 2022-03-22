@@ -1,10 +1,8 @@
 package com.samplee.todolist.screens
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -15,7 +13,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -23,7 +20,6 @@ import com.samplee.todolist.R
 import com.samplee.todolist.model.AboutData
 import com.samplee.todolist.theme.graySurface
 import com.samplee.todolist.viewmodel.AboutViewmodel
-import com.samplee.todolist.screens.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -36,14 +32,15 @@ fun AboutDetails(
     viewModel: AboutViewmodel,
     pressOnBack: () -> Unit
 ) {
-
     var desc by remember { mutableStateOf("") }
     val about: AboutData? by viewModel.about.observeAsState()
-    val context = LocalContext.current
 
     about?.let {
         desc = it.desc
     }
+    val scaffoldState = rememberScaffoldState()
+    val snackbarCoroutineScope = rememberCoroutineScope()
+
 
     Scaffold(
         topBar = { TopAppBar(
@@ -69,21 +66,21 @@ fun AboutDetails(
                     viewModel.update(AboutData(about!!.id, desc))
                     pressOnBack()
                 } else {
+
                     if(!desc.isBlank()&&!desc.isEmpty()) {
                         viewModel.insert(AboutData(0, desc))
                         pressOnBack()
                     }
                     else{
-                        showMessage(context,"About description should not be empty")
+                        showSnackBar(snackbarCoroutineScope,scaffoldState)
                     }
                 }
             }) {
                 Icon(Icons.Filled.Done, "")
             }
-        }
+        },
+        scaffoldState  = scaffoldState
     ) {
-
-
         Column(
             modifier = Modifier
                 .fillMaxHeight()
@@ -113,6 +110,11 @@ fun AboutDetails(
     }
 }
 
+fun showSnackBar(snackbarCoroutineScope: CoroutineScope, scaffoldState: ScaffoldState,) {
+    snackbarCoroutineScope.launch {
+        scaffoldState.snackbarHostState.showSnackbar("About description should not be empty",actionLabel = "OK")
+    }
+}
 /****************************************************************
  * showMessage() - show the toast message
  ****************************************************************/

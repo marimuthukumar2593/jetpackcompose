@@ -12,13 +12,14 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     compileSdk 31
-
+    buildToolsVersion "30.0.3"
     defaultConfig {
         applicationId "com.samplee.todolist"
         minSdk 21
         targetSdk 31
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -100,5 +101,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+
+    implementation "androidx.multidex:multidex:2.0.1"
+
+//    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.1.0'
+
 
 }
